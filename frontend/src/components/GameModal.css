@@ -1,0 +1,298 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: rgba(3, 2, 8, 0.78);
+  backdrop-filter: blur(8px);
+  animation: modalFundo 0.3s ease;
+}
+
+.modal {
+  position: relative;
+  width: min(980px, 100%);
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(20, 16, 44, 0.98), rgba(8, 7, 18, 0.99));
+  border: 1px solid var(--line-2);
+  box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.95), 0 0 80px -30px var(--violet);
+  animation: modalEntrar 0.45s var(--ease);
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(6, 5, 13, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, transform 0.2s;
+}
+.modal-close:hover {
+  background: var(--violet);
+  transform: rotate(90deg);
+}
+
+.modal-media {
+  position: relative;
+  aspect-ratio: 21 / 9;
+  overflow: hidden;
+}
+.modal-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(10, 8, 22, 1) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* Modo trailer: câmera lenta sobre a arte, barras de cinema e título */
+.modal-media.trailer {
+  aspect-ratio: 16 / 9;
+}
+.modal-media.trailer::after {
+  display: none;
+}
+.modal-media.trailer .cover-art {
+  animation: modalCamera 14s ease-in-out infinite alternate;
+  animation-play-state: paused;
+}
+.modal-media.trailer.playing .cover-art,
+.modal-media.trailer.playing .modal-player-bar span {
+  animation-play-state: running;
+}
+.modal-letterbox {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 46px 0 #000,
+    inset 0 -46px 0 #000;
+}
+.modal-trailer-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(-50%);
+  text-align: center;
+  animation: modalTitulo 4s var(--ease) both;
+}
+.modal-trailer-title small {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--cyan-2);
+}
+.modal-trailer-title strong {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5vw, 56px);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 40px var(--cover-glow, var(--violet));
+}
+.modal-player {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.modal-player button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+.modal-player-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+.modal-player-bar span {
+  display: block;
+  height: 100%;
+  background: var(--grad);
+  transform-origin: left;
+  animation: modalProgresso 84s linear forwards;
+  animation-play-state: paused;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  padding: 8px 32px 32px;
+}
+.modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.modal-genre {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--violet-2);
+}
+.modal-main h2 {
+  margin: 10px 0;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+}
+.modal-main p {
+  color: #cfcde8;
+  line-height: 1.65;
+}
+.modal-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.modal-rating strong {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: #fff;
+}
+
+.modal-facts {
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+.modal-facts div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-facts dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.modal-facts dd {
+  margin: 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+.modal-platforms {
+  display: flex;
+  gap: 4px;
+}
+
+.modal-buy {
+  margin-top: 18px;
+}
+.modal-price {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+.modal-price > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-price strong {
+  font-family: var(--font-display);
+  font-size: 30px;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+.modal-actions .btn:first-child {
+  flex: 1;
+}
+
+@keyframes modalFundo {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes modalEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+}
+@keyframes modalCamera {
+  from {
+    transform: scale(1.05) translate(-2%, 1%);
+  }
+  to {
+    transform: scale(1.25) translate(3%, -2%);
+  }
+}
+@keyframes modalTitulo {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.4em;
+  }
+  25%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes modalProgresso {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (max-width: 820px) {
+  .modal-overlay {
+    padding: 12px;
+    place-items: start center;
+  }
+  .modal-body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 4px 20px 24px;
+  }
+  .modal-media {
+    aspect-ratio: 16 / 9;
+  }
+  .modal-letterbox {
+    box-shadow:
+      inset 0 22px 0 #000,
+      inset 0 -22px 0 #000;
+  }
+}

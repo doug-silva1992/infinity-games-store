@@ -1,0 +1,47 @@
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logo-mark {
+  width: 46px;
+  height: 23px;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.7));
+}
+
+/* Pulso de luz percorrendo o símbolo do infinito */
+.logo-flow {
+  stroke: #fff;
+  stroke-dasharray: 8 92;
+  stroke-linecap: round;
+  animation: logoFlow 3.2s linear infinite;
+  opacity: 0.9;
+}
+
+.logo-word {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  line-height: 1;
+}
+.logo-word strong {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+.logo-word span {
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.62em;
+  color: var(--cyan-2);
+}
+
+@keyframes logoFlow {
+  to {
+    stroke-dashoffset: -100;
+  }
+}

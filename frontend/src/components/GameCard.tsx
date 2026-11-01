@@ -1,50 +1,86 @@
+import type { CSSProperties } from 'react'
 import type { Jogo } from '../data/jogos'
-import { brl, desconto, gradiente } from '../utils/format'
+import { useStore } from '../store/useStore'
+import { brl, compacto, desconto, modoCurto } from '../utils/format'
+import BuyButton from './BuyButton'
+import { DragonSeal } from './Dragon'
+import GameCover from './GameCover'
+import Icon from './Icon'
+import './GameCard.css'
 
 type Props = {
   jogo: Jogo
-  favorito: boolean
-  onFavoritar: () => void
-  onAdicionar: () => void
+  // Texto exibido no canto da capa (ex.: data de lançamento)
+  etiqueta?: string
+  // Motivo da recomendação
+  motivo?: string
 }
 
-function GameCard({ jogo, favorito, onFavoritar, onAdicionar }: Props) {
+function GameCard({ jogo, etiqueta, motivo }: Props) {
+  const { desejos, alternarDesejo, abrirJogo } = useStore()
   const off = desconto(jogo)
+  const desejado = desejos.has(jogo.id)
 
   return (
-    <article className="gs-card">
-      <div className="gs-cover" style={{ background: gradiente(jogo.cores) }}>
-        <span className="gs-cover-icon">{jogo.icone}</span>
-        {jogo.novo && <span className="gs-tag new">Lançamento</span>}
-        {off > 0 && <span className="gs-tag off">-{off}%</span>}
-        <button
-          className={`gs-fav ${favorito ? 'on' : ''}`}
-          onClick={onFavoritar}
-          aria-label="Favoritar"
-        >
-          ♥
-        </button>
-      </div>
-      <div className="gs-card-body">
-        <div className="gs-platforms">
+    <article className="card" style={{ '--glow': jogo.cores[2] } as CSSProperties}>
+      <button className="card-media" onClick={() => abrirJogo(jogo)} aria-label={`Ver detalhes de ${jogo.titulo}`}>
+        <GameCover jogo={jogo} />
+        <span className="card-badges">
+          {etiqueta && <span className="badge card-label">{etiqueta}</span>}
+          {jogo.novo && !etiqueta && <span className="badge badge-new">Novo</span>}
+          {off > 0 && <span className="badge badge-off">-{off}%</span>}
+        </span>
+        <span className="card-peek">
+          <Icon name="play" size={14} filled /> Ver detalhes
+        </span>
+      </button>
+
+      <button
+        className={`card-wish ${desejado ? 'on' : ''}`}
+        onClick={() => alternarDesejo(jogo)}
+        aria-pressed={desejado}
+        aria-label={desejado ? 'Remover da lista de desejos' : 'Adicionar à lista de desejos'}
+      >
+        <Icon name="heart" size={16} filled={desejado} />
+      </button>
+
+      <div className="card-body">
+        <div className="card-top">
+          <span className="card-genre">{jogo.genero}</span>
+          <span className="card-mode">
+            <Icon name={jogo.modo === 'Singleplayer' ? 'user' : 'users'} size={13} />
+            {modoCurto[jogo.modo]}
+          </span>
+        </div>
+
+        <h3 className="card-title">
+          {jogo.titulo}
+          {jogo.dragao && <DragonSeal compact className="card-seal" />}
+        </h3>
+        {motivo && <p className="card-reason">{motivo}</p>}
+
+        <div className="card-stats">
+          <span className="card-rating">
+            <Icon name="star" size={13} filled /> {jogo.nota.toFixed(1)}
+            <small>({compacto(jogo.avaliacoes)})</small>
+          </span>
+          <span>
+            <Icon name="clock" size={13} /> ~{jogo.horas}h
+          </span>
+        </div>
+
+        <div className="card-platforms">
           {jogo.plataformas.map((p) => (
-            <span key={p}>{p}</span>
+            <span key={p} className="platform-tag">{p}</span>
           ))}
         </div>
-        <h3>{jogo.titulo}</h3>
-        <div className="gs-meta">
-          <span>{jogo.genero}</span>
-          <span className="gs-star">★ {jogo.nota.toFixed(1)}</span>
-        </div>
-        <div className="gs-price-row">
-          <div>
-            {jogo.precoAntigo && <s>{brl(jogo.precoAntigo)}</s>}
+
+        <div className="card-buy">
+          <div className="card-price">
+            {jogo.precoAntigo && <span className="price-old">{brl(jogo.precoAntigo)}</span>}
             <strong>{brl(jogo.preco)}</strong>
-            <small>ou 10x de {brl(jogo.preco / 10)}</small>
           </div>
-          <button className="gs-btn" onClick={onAdicionar}>
-            + Carrinho
-          </button>
+          <BuyButton jogo={jogo} />
         </div>
       </div>
     </article>

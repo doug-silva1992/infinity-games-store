@@ -23,10 +23,12 @@ Loja de jogos digitais com frontend em React, backend em NestJS e banco PostgreS
 │   └── Dockerfile
 ├── frontend/            # Loja em React + Vite
 │   ├── src/
-│   │   ├── App.tsx           # página da loja (cabeçalho, destaque, filtros, grade)
-│   │   ├── components/       # GameCard, CartDrawer
-│   │   ├── data/jogos.ts     # catálogo de exemplo
-│   │   └── utils/format.ts   # formatação de preço, desconto, gradientes
+│   │   ├── App.tsx           # composição da página e vitrines
+│   │   ├── components/       # Navbar, Hero, GameCard, GameCover, GamerHub, Dragon...
+│   │   ├── store/            # estado global (carrinho, desejos, XP, conquistas)
+│   │   ├── data/             # catálogo (jogos.ts) e perfil gamer de exemplo (perfil.ts)
+│   │   ├── hooks/            # hooks utilitários
+│   │   └── utils/format.ts   # formatação de preço, datas, busca
 │   ├── vite.config.ts        # proxy de /api para o backend
 │   └── Dockerfile
 ├── docker-compose.yml   # serviços db, backend e frontend
@@ -95,16 +97,37 @@ Navegador → Vite (:5173) → /api/* → NestJS (:3000) → TypeORM → Postgre
 
 ## Frontend
 
-A loja segue o protótipo de design (`preview.html`):
+### Identidade visual
 
-- Cabeçalho com busca, contador de favoritos e botão do carrinho
-- Banner com o jogo em destaque da semana
-- Filtros por plataforma e gênero, opção "só ofertas" e ordenação (preço, avaliação, desconto)
-- Grade de jogos com tags de lançamento e de desconto, favoritos e parcelamento
-- Carrinho lateral com controle de quantidade, economia, subtotal e finalização do pedido
+- **Cores**: roxo neon `#7C3AED` (principal), azul elétrico `#3B82F6` (secundária) e ciano `#06B6D4` (destaque). Os tokens ficam em `src/index.css`.
+- **Tipografia**: Chakra Petch (títulos) e Inter (texto).
+- **Fundo**: brilhos em gradiente, grid futurista animado e partículas conectadas em canvas (`Background.tsx`).
+- **Mascote**: **Ignis**, o dragão oficial, desenhado em SVG (`Dragon.tsx`). Aparece no selo "Recomendado pelo Dragão", nas recomendações, nas conquistas, nos estados vazios e no rodapé.
+- **Capas**: cada jogo tem uma arte SVG gerada a partir de uma cena (cidade, montanhas, espaço, floresta, oceano, arena ou deserto) e da sua paleta (`GameCover.tsx`). Troque por imagens reais quando houver.
+
+### Seções da página
+
+| Seção | Destaques |
+|---|---|
+| Navbar | Busca avançada (Ctrl+K) com filtros de plataforma, gênero e preço, notificações, lista de desejos, carrinho e menu do perfil gamer |
+| Hero | Carrossel de destaques com parallax, iluminação animada, nota, plataformas, preço, "Comprar" e "Ver trailer" |
+| 🔥 Em Alta | Trilho horizontal ordenado por tendência |
+| ⚡ Promoções Relâmpago | Contagem regressiva (ciclos de 6h) e barra de chaves vendidas |
+| 🎯 Recomendados para Você | Curadoria do Ignis, com o motivo de cada recomendação |
+| 🏆 Mais Vendidos | Pódio com o nº 1 em destaque e ranking do 2º ao 5º |
+| Central do Jogador | Nível, XP, conquistas por raridade, ranking da comunidade e lista de desejos |
+| 🆕 Lançamentos | Trilho ordenado por data de lançamento |
+| 💎 Jogos Indie | Grade em mosaico |
+| Catálogo | Filtros por plataforma, gênero e modo, "só ofertas" e ordenação |
+
+### Sistema gamer
+
+Os dados ficam no estado global (`src/store/`). Comprar um jogo rende XP (2 XP por real). Algumas ações desbloqueiam conquistas: comprar em promoção, comprar um indie, comprar um jogo recomendado pelo Ignis ou ter 5 jogos na lista de desejos. Subir de nível e desbloquear conquistas mostra notificações com o mascote, e a posição no ranking se atualiza.
+
+O perfil, o ranking e as notificações são dados de demonstração (`src/data/perfil.ts`). Não há persistência: recarregar a página volta ao estado inicial.
 
 ## Observações
 
-- **O catálogo ainda é estático**: os jogos vêm de `frontend/src/data/jogos.ts`. O próximo passo é criar uma entidade de jogos no backend e uma rota `GET /api/jogos`.
+- **O catálogo e o perfil gamer ainda são estáticos**: vêm de `frontend/src/data/`. O próximo passo é criar entidades no backend (jogos, usuários, conquistas) e as rotas correspondentes.
 - **O `synchronize` do TypeORM fica ligado fora de produção**: ele cria e altera as tabelas automaticamente. Em produção, use migrations.
 - **A recarga automática no Docker usa polling** (`CHOKIDAR_USEPOLLING` no Vite e `TSC_WATCHFILE` no NestJS), porque os eventos de arquivo do Windows não chegam aos containers.

@@ -1,0 +1,216 @@
+.search {
+  position: relative;
+  flex: 1;
+  max-width: 560px;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  color: var(--muted);
+  background: rgba(17, 15, 36, 0.8);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.search.open .search-field,
+.search-field:focus-within {
+  border-color: rgba(124, 58, 237, 0.7);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15), 0 0 24px rgba(124, 58, 237, 0.25);
+}
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: 0;
+  color: var(--txt);
+  font-size: 14.5px;
+}
+.search-field input::placeholder {
+  color: var(--dim);
+}
+.search-kbd {
+  font-family: var(--font-display);
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.search-clear {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.search-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(12, 10, 28, 0.96);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(124, 58, 237, 0.2);
+  animation: painelEntrar 0.22s var(--ease);
+}
+
+.search-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.search-chips,
+.search-suggest > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+.search-chip:hover {
+  color: var(--txt);
+  border-color: var(--violet-2);
+}
+.search-chip.on {
+  color: #fff;
+  background: var(--violet);
+  border-color: var(--violet);
+}
+.search-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.search-row select {
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.search-range {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.search-range input {
+  flex: 1;
+  accent-color: var(--cyan);
+}
+
+.search-suggest {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+}
+.search-suggest > span {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.search-empty {
+  padding: 20px 4px 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.search-results {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.search-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background 0.15s;
+}
+.search-result.active {
+  background: rgba(124, 58, 237, 0.18);
+}
+.search-thumb {
+  width: 64px;
+  height: 40px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.search-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.search-info strong {
+  font-size: 14px;
+}
+.search-info small {
+  color: var(--dim);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.search-all {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cyan-2);
+  border-top: 1px solid var(--line);
+}
+.search-all:hover {
+  color: #fff;
+}
+
+@keyframes painelEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}

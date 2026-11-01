@@ -1,0 +1,206 @@
+.best {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 20px;
+}
+
+.best-champion {
+  --glow: var(--gold);
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  box-shadow: 0 0 50px -16px rgba(251, 191, 36, 0.5);
+}
+.best-champion-art {
+  position: absolute;
+  inset: 0;
+}
+.best-champion-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(6, 5, 13, 0.97) 10%, transparent 65%);
+}
+.best-champion:hover .cover-art {
+  transform: scale(1.06);
+}
+
+.best-crown {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #1c1300;
+  background: linear-gradient(120deg, #fde68a, #fbbf24, #f59e0b);
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.6);
+}
+
+.best-champion-info {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: 18px;
+  padding: 24px;
+  pointer-events: none;
+}
+.best-champion-info .btn {
+  pointer-events: auto;
+}
+.best-rank-big {
+  font-family: var(--font-display);
+  font-size: 96px;
+  font-weight: 700;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(251, 191, 36, 0.85);
+  text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
+}
+.best-champion-info h3 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  line-height: 1.1;
+}
+.best-champion-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.best-champion-buy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.best-champion-buy strong {
+  font-family: var(--font-display);
+  font-size: 24px;
+}
+
+.best-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.best-row {
+  --glow: var(--cyan);
+  flex: 1;
+  display: grid;
+  grid-template-columns: 56px 112px 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: transform 0.35s var(--ease), border-color 0.35s, box-shadow 0.35s;
+}
+.best-row:hover {
+  transform: translateX(6px);
+  border-color: color-mix(in srgb, var(--glow) 55%, transparent);
+  box-shadow: 0 0 26px -10px var(--glow);
+}
+.best-rank {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--violet-2);
+}
+.best-thumb {
+  width: 112px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.best-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.best-info strong {
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+.best-info small {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.best-info small svg {
+  color: var(--gold);
+}
+.best-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.best-price strong {
+  font-family: var(--font-display);
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+@media (max-width: 1100px) {
+  .best {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .best-champion {
+    min-height: 380px;
+  }
+  .best-champion-info {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .best-rank-big {
+    font-size: 64px;
+  }
+  .best-champion-buy {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .best-row {
+    grid-template-columns: 34px 80px 1fr;
+    gap: 10px;
+  }
+  .best-rank {
+    font-size: 28px;
+  }
+  .best-thumb {
+    width: 80px;
+    height: 50px;
+  }
+  .best-price,
+  .best-row .btn {
+    display: none;
+  }
+}

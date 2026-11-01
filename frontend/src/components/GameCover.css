@@ -1,0 +1,42 @@
+.cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #05030c;
+  isolation: isolate;
+}
+
+.cover-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s var(--ease);
+}
+
+/* Reflexo de luz e textura de linhas, para dar acabamento de arte final */
+.cover-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 45%, rgba(5, 3, 12, 0.75) 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 3px);
+}
+
+.cover-logo {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow:
+    0 0 18px var(--cover-glow),
+    0 2px 6px rgba(0, 0, 0, 0.8);
+}

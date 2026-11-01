@@ -1,0 +1,212 @@
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(3, 2, 8, 0.6);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.drawer-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  width: min(440px, 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: linear-gradient(180deg, rgba(20, 16, 44, 0.98), rgba(8, 7, 18, 0.99));
+  border-left: 1px solid var(--line-2);
+  box-shadow: -30px 0 60px -20px rgba(124, 58, 237, 0.35);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.45s var(--ease), visibility 0.45s;
+}
+.drawer.open {
+  transform: none;
+  visibility: visible;
+}
+
+.drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.drawer-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 21px;
+}
+.drawer-head h2 span {
+  display: grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 13px;
+  border-radius: 12px;
+  color: #021316;
+  background: var(--cyan);
+}
+.drawer-close {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: var(--muted);
+  transition: background 0.2s, color 0.2s;
+}
+.drawer-close:hover {
+  color: #fff;
+  background: var(--surface-2);
+}
+
+.drawer-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+.drawer-empty strong {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--txt);
+}
+.drawer-empty .dragon {
+  animation: drawerFlutuar 3s ease-in-out infinite;
+}
+
+.drawer-list {
+  flex: 1;
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.drawer-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  animation: drawerItem 0.35s var(--ease);
+}
+.drawer-thumb {
+  width: 92px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.drawer-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.drawer-info strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+.drawer-info small {
+  font-size: 12px;
+  color: var(--dim);
+}
+.drawer-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.drawer-remove {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: var(--dim);
+  transition: color 0.2s, background 0.2s;
+}
+.drawer-remove:hover {
+  color: var(--danger);
+  background: rgba(244, 63, 94, 0.12);
+}
+
+.drawer-summary {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.drawer-xp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  border-radius: 12px;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+.drawer-xp svg {
+  color: var(--cyan-2);
+}
+.drawer-xp strong {
+  color: var(--cyan-2);
+}
+.drawer-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 7px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.drawer-row.save {
+  color: var(--success);
+}
+.drawer-row.total {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+.drawer-checkout {
+  width: 100%;
+  height: 52px;
+  margin-top: 14px;
+  font-size: 15px;
+}
+
+@keyframes drawerItem {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+@keyframes drawerFlutuar {
+  50% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+}

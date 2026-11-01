@@ -1,0 +1,51 @@
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(250px, 23%, 300px);
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Espaço para a elevação e o glow dos cards no hover */
+  padding: 12px 4px 28px;
+  margin: -12px -4px -28px;
+  mask-image: linear-gradient(90deg, #000 92%, transparent);
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail > * {
+  scroll-snap-align: start;
+}
+
+.rail-nav {
+  display: flex;
+  gap: 8px;
+}
+.rail-arrow {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  background: var(--surface);
+  transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.rail-arrow:hover:not(:disabled) {
+  background: var(--violet);
+  border-color: var(--violet);
+}
+.rail-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .rail {
+    grid-auto-columns: 78%;
+  }
+  .rail-nav {
+    display: none;
+  }
+}
