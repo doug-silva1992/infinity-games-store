@@ -1,0 +1,144 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.form-field > span:first-child {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.form-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 14px;
+  border-radius: 12px;
+  color: var(--dim);
+  background: rgba(6, 5, 13, 0.6);
+  border: 1px solid var(--line);
+  transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+}
+.form-input > svg {
+  flex-shrink: 0;
+}
+.form-input:focus-within {
+  color: var(--cyan-2);
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.18);
+}
+.form-input:has([aria-invalid='true']) {
+  border-color: var(--danger);
+}
+.form-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--txt);
+}
+.form-input input::placeholder {
+  color: var(--dim);
+}
+
+.form-eye {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  margin-right: -6px;
+  border-radius: 8px;
+  color: var(--dim);
+  transition: color 0.2s, background 0.2s;
+}
+.form-eye:hover {
+  color: #fff;
+  background: var(--surface-2);
+}
+
+.form-error {
+  display: block;
+  font-size: 12.5px;
+  color: #fda4af;
+  animation: formTremer 0.4s;
+}
+.form-check + .form-error {
+  margin-top: 6px;
+}
+
+.form-check {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+.form-check input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.form-box {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 6px;
+  color: transparent;
+  border: 1px solid var(--line-2);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.form-check input:checked + .form-box {
+  color: #fff;
+  background: var(--grad);
+  border-color: transparent;
+}
+.form-check input:focus-visible + .form-box {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.form-submit {
+  width: 100%;
+  height: 52px;
+  margin-top: 4px;
+}
+.form-submit:disabled {
+  filter: saturate(0.6) brightness(0.9);
+}
+.form-spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: formGirar 0.7s linear infinite;
+}
+
+@keyframes formTremer {
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+@keyframes formGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}

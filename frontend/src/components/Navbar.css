@@ -72,8 +72,7 @@
   border: 1px solid transparent;
   transition: all 0.2s;
 }
-.nav-icon:hover,
-.nav-icon.on {
+.nav-icon:hover {
   color: #fff;
   background: var(--surface-2);
   border-color: var(--line);
@@ -94,9 +93,6 @@
   background: var(--violet);
   border: 2px solid var(--bg);
   border-radius: 10px;
-}
-.nav-badge-alert {
-  background: var(--danger);
 }
 .nav-badge-cart {
   background: var(--cyan);
@@ -150,159 +146,58 @@
   box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(124, 58, 237, 0.2);
   animation: painelEntrar 0.22s var(--ease);
 }
-.nav-menu-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+/* Menu do visitante: desliza para baixo ao passar o mouse */
+.nav-guest-avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--grad);
+  box-shadow: 0 0 16px -4px var(--violet);
 }
-.nav-menu-head strong {
-  font-family: var(--font-display);
-  font-size: 16px;
+.nav-guest .nav-profile-caret {
+  transition: transform 0.3s var(--ease);
 }
-.nav-menu-head button {
-  font-size: 12.5px;
-  color: var(--cyan-2);
+.nav-guest.open .nav-profile-caret {
+  transform: rotate(180deg);
+}
+.nav-guest.open .nav-profile {
+  border-color: var(--line-2);
 }
 
-.notif-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.nav-menu-guest {
+  width: 280px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
+  animation: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-12px);
+  transition: opacity 0.25s var(--ease), transform 0.3s var(--ease), visibility 0.3s;
 }
-.notif-list li {
-  position: relative;
-  display: flex;
-  gap: 12px;
-  padding: 10px;
-  border-radius: 10px;
-}
-.notif-list li.unread {
-  background: rgba(124, 58, 237, 0.1);
-}
-.notif-list li.unread::after {
+/* Ponte invisível sobre o espaço entre botão e menu, para o hover não se perder */
+.nav-menu-guest::before {
   content: '';
   position: absolute;
-  top: 14px;
-  right: 10px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
+  inset: -14px 0 auto;
+  height: 14px;
 }
-.notif-icon {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  background: var(--grad);
+.nav-guest.open .nav-menu-guest {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
-.notif-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding-right: 12px;
-  font-size: 13px;
+.nav-menu-guest .btn {
+  width: 100%;
 }
-.notif-text span {
-  color: var(--muted);
-}
-.notif-text small {
-  color: var(--dim);
-  font-size: 11.5px;
-}
-
-.profile-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.profile-card > div {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-.profile-card strong {
-  font-family: var(--font-display);
-  font-size: 17px;
-}
-.profile-card span {
-  font-size: 12.5px;
-  color: var(--gold);
-}
-.profile-level {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff !important;
-  background: var(--grad);
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-}
-.profile-xp {
-  margin-top: 14px;
-}
-.profile-xp small {
-  display: block;
-  margin-top: 6px;
-  font-size: 11.5px;
-  color: var(--muted);
-}
-.profile-xp-bar {
-  height: 8px;
-  border-radius: 8px;
-  background: rgba(167, 139, 250, 0.15);
-  overflow: hidden;
-}
-.profile-xp-bar span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--grad);
-  box-shadow: 0 0 12px var(--cyan);
-  transition: width 1s var(--ease);
-}
-.profile-stats {
-  display: flex;
-  justify-content: space-between;
-  margin: 14px 0;
-  padding: 12px 0;
-  border-block: 1px solid var(--line);
+.nav-menu-guest p {
+  margin-top: 4px;
   font-size: 12.5px;
   color: var(--muted);
-}
-.profile-stats strong {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 17px;
-  color: #fff;
-}
-.profile-links {
-  display: flex;
-  flex-direction: column;
-}
-.profile-links a {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  color: var(--muted);
-  transition: background 0.15s, color 0.15s;
-}
-.profile-links a:hover {
-  color: #fff;
-  background: rgba(124, 58, 237, 0.15);
+  text-align: center;
 }
 
 @keyframes badgePulse {

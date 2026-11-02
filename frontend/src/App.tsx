@@ -1,8 +1,11 @@
+import { useEffect, type ComponentType } from 'react'
 import Background from './components/Background'
 import BestSellers from './components/BestSellers'
 import CartDrawer from './components/CartDrawer'
 import Catalog from './components/Catalog'
+import Checkout from './components/Checkout'
 import { DragonMascot } from './components/Dragon'
+import Entrar from './components/Entrar'
 import FlashSale from './components/FlashSale'
 import Footer from './components/Footer'
 import GameCard from './components/GameCard'
@@ -12,8 +15,10 @@ import Hero from './components/Hero'
 import IndieShowcase from './components/IndieShowcase'
 import Navbar from './components/Navbar'
 import Rail from './components/Rail'
+import Registrar from './components/Registrar'
 import Toasts from './components/Toasts'
 import { JOGOS } from './data/jogos'
+import { useHash } from './hooks/useHash'
 import StoreProvider from './store/StoreProvider'
 import { dataCurta } from './utils/format'
 import './App.css'
@@ -30,10 +35,9 @@ const MOTIVOS: Record<number, string> = {
   13: 'Joia indie com nota 4.9',
 }
 
-function App() {
+function Loja() {
   return (
-    <StoreProvider>
-      <Background />
+    <>
       <Navbar />
 
       <main className="container">
@@ -96,6 +100,27 @@ function App() {
       <Footer />
       <CartDrawer />
       <GameModal />
+    </>
+  )
+}
+
+// Rotas pelo hash da URL: #entrar, #registrar e #checkout abrem telas próprias, o resto é a loja.
+// O StoreProvider (e os toasts) ficam por fora para o carrinho sobreviver à troca de tela
+const TELAS: Record<string, ComponentType> = { '#entrar': Entrar, '#registrar': Registrar, '#checkout': Checkout }
+
+function App() {
+  const hash = useHash()
+  const Tela = TELAS[hash] ?? Loja
+
+  // Chaves para não devolver o retorno do scrollTo (uma Promise nos navegadores novos)
+  useEffect(() => {
+    scrollTo(0, 0)
+  }, [Tela])
+
+  return (
+    <StoreProvider>
+      <Background />
+      <Tela />
       <Toasts />
     </StoreProvider>
   )

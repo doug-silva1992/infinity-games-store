@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { xpGanhoPorCompra } from '../data/perfil'
 import { useStore } from '../store/useStore'
+import { resumoDoCarrinho } from '../utils/carrinho'
 import { brl, desconto, numero } from '../utils/format'
 import { DragonMascot } from './Dragon'
 import GameCover from './GameCover'
@@ -8,13 +8,10 @@ import Icon from './Icon'
 import './CartDrawer.css'
 
 function CartDrawer() {
-  const { carrinho, carrinhoAberto, setCarrinhoAberto, removerDoCarrinho, finalizarCompra } = useStore()
+  const { carrinho, carrinhoAberto, setCarrinhoAberto, removerDoCarrinho } = useStore()
   const fechar = () => setCarrinhoAberto(false)
 
-  const totalCheio = carrinho.reduce((s, j) => s + (j.precoAntigo ?? j.preco), 0)
-  const total = carrinho.reduce((s, j) => s + j.preco, 0)
-  const economia = totalCheio - total
-  const xp = carrinho.reduce((s, j) => s + xpGanhoPorCompra(j.preco), 0)
+  const { totalCheio, total, economia, xp } = resumoDoCarrinho(carrinho)
 
   useEffect(() => {
     if (!carrinhoAberto) return
@@ -94,9 +91,9 @@ function CartDrawer() {
                 <span>Total</span>
                 <span>{brl(total)}</span>
               </div>
-              <button className="btn btn-primary drawer-checkout" onClick={finalizarCompra}>
+              <a href="#checkout" className="btn btn-primary drawer-checkout" onClick={fechar}>
                 Finalizar compra <Icon name="arrowRight" size={16} />
-              </button>
+              </a>
             </div>
           </>
         )}
