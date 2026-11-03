@@ -10,7 +10,15 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { AlterarEmailDto, AlterarSenhaDto } from './dto/alterar-conta.dto.js';
 import {
   AtualizarUsuarioDto,
   GanharXpDto,
@@ -56,6 +64,29 @@ export class UsuariosController {
     @Body() dto: AtualizarUsuarioDto,
   ) {
     return this.usuariosService.atualizar(id, dto);
+  }
+
+  // Usadas pela tela Minha conta (Conta.tsx) do front
+  @Patch(':id/email')
+  @ApiOkResponse({ type: Usuario })
+  @ApiUnauthorizedResponse({ description: 'Senha atual incorreta' })
+  @ApiConflictResponse({ description: 'E-mail já cadastrado' })
+  alterarEmail(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AlterarEmailDto,
+  ) {
+    return this.usuariosService.alterarEmail(id, dto);
+  }
+
+  @Patch(':id/senha')
+  @HttpCode(204)
+  @ApiNoContentResponse()
+  @ApiUnauthorizedResponse({ description: 'Senha atual incorreta' })
+  alterarSenha(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AlterarSenhaDto,
+  ) {
+    return this.usuariosService.alterarSenha(id, dto);
   }
 
   @Post(':id/xp')

@@ -1,12 +1,15 @@
 import { useState, type FormEvent } from 'react'
-import { SENHA_MINIMA, emailValido, esperar } from '../utils/validacao'
+import { useStore } from '../store/useStore'
+import { postar, type Usuario } from '../utils/api'
+import { SENHA_MINIMA, emailValido } from '../utils/validacao'
 import AuthPage, { Sucesso } from './AuthPage'
 import { Campo, Enviar, Marcar } from './Form'
 
-type Erros = { email?: string; senha?: string }
+type Erros = { email?: string; senha?: string; geral?: string }
 
-// Tela de login (substituir o envio por POST /api/auth/login quando houver autenticação)
+// Tela de login: confere a conta em POST /api/auth/login e guarda o jogador no store
 function Entrar() {
+  const { usuario, entrar } = useStore()
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [lembrar, setLembrar] = useState(true)
@@ -23,9 +26,14 @@ function Entrar() {
     if (Object.keys(novos).length > 0) return
 
     setEnviando(true)
-    await esperar(900)
-    setEnviando(false)
-    setPronto(true)
+    try {
+      entrar(await postar<Usuario>('/api/auth/login', { email, senha }), lembrar)
+      setPronto(true)
+    } catch (erro) {
+      setErros({ geral: erro instanceof Error ? erro.message : 'Algo deu errado. Tente novamente.' })
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
@@ -40,7 +48,7 @@ function Entrar() {
       }
     >
       {pronto ? (
-        <Sucesso titulo="Login realizado!" texto={`Bom te ver de novo, ${email.trim()}.`} />
+        <Sucesso titulo="Login realizado!" texto={`Bom te ver de novo, ${usuario?.gamertag}.`} />
       ) : (
         <form className="auth-form" onSubmit={enviar} noValidate>
           <Campo
@@ -67,6 +75,11 @@ function Entrar() {
           <Marcar marcado={lembrar} aoMudar={setLembrar}>
             Lembrar de mim neste dispositivo
           </Marcar>
+          {erros.geral && (
+            <small className="form-error" role="alert">
+              {erros.geral}
+            </small>
+          )}
           <Enviar enviando={enviando} rotulo="Entrar" carregando="Entrando..." />
         </form>
       )}

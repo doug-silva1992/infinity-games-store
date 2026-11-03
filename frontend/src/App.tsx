@@ -4,6 +4,7 @@ import BestSellers from './components/BestSellers'
 import CartDrawer from './components/CartDrawer'
 import Catalog from './components/Catalog'
 import Checkout from './components/Checkout'
+import Conta from './components/Conta'
 import { DragonMascot } from './components/Dragon'
 import Entrar from './components/Entrar'
 import FlashSale from './components/FlashSale'
@@ -104,9 +105,14 @@ function Loja() {
   )
 }
 
-// Rotas pelo hash da URL: #entrar, #registrar e #checkout abrem telas próprias, o resto é a loja.
+// Rotas pelo hash da URL: #entrar, #registrar, #checkout e #conta abrem telas próprias, o resto é a loja.
 // O StoreProvider (e os toasts) ficam por fora para o carrinho sobreviver à troca de tela
-const TELAS: Record<string, ComponentType> = { '#entrar': Entrar, '#registrar': Registrar, '#checkout': Checkout }
+const TELAS: Record<string, ComponentType> = {
+  '#entrar': Entrar,
+  '#registrar': Registrar,
+  '#checkout': Checkout,
+  '#conta': Conta,
+}
 
 function App() {
   const hash = useHash()

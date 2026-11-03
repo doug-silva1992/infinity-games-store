@@ -12,6 +12,7 @@ const INDIES = JOGOS.filter((j) => j.indie).sort((a, b) => b.nota - a.nota)
 
 function IndieShowcase() {
   const { abrirJogo } = useStore()
+  if (INDIES.length === 0) return null
 
   return (
     <section className="section" id="indie">

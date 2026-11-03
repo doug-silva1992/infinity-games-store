@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import type { Jogo } from '../data/jogos'
 import type { Notificacao } from '../data/perfil'
+import type { Usuario } from '../utils/api'
 
 export type Toast = {
   id: number
@@ -13,6 +14,7 @@ export type Modal = { jogo: Jogo; trailer: boolean } | null
 
 export type Store = {
   // Estado
+  usuario: Usuario | null
   carrinho: Jogo[]
   desejos: Set<number>
   biblioteca: Set<number>
@@ -26,6 +28,9 @@ export type Store = {
   modal: Modal
   busca: string
   // Ações
+  entrar: (usuario: Usuario, lembrar: boolean) => void
+  atualizarUsuario: (usuario: Usuario) => void
+  sair: () => void
   adicionarAoCarrinho: (jogo: Jogo) => void
   removerDoCarrinho: (id: number) => void
   alternarDesejo: (jogo: Jogo) => void

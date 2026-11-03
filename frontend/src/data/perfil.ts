@@ -37,8 +37,8 @@ export const CONQUISTAS: Conquista[] = [
 ]
 
 export const CONQUISTAS_INICIAIS = ['veterano', 'critico', 'coruja']
-export const BIBLIOTECA_INICIAL = [5, 11]
-export const DESEJOS_INICIAIS = [12, 14]
+export const BIBLIOTECA_INICIAL: number[] = []
+export const DESEJOS_INICIAIS: number[] = []
 
 export const RANKING = [
   { gamertag: 'VoidWalker', xp: 41210 },

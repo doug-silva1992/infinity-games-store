@@ -1,0 +1,262 @@
+.conta {
+  min-height: 100vh;
+  padding-bottom: 64px;
+}
+
+.conta-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 28px;
+}
+.conta-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.conta-back:hover {
+  color: #fff;
+}
+
+.conta-perfil,
+.conta-card,
+.conta-vazia {
+  border-radius: 24px;
+  border-color: var(--line-2);
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 80px -40px var(--violet);
+  animation: contaEntrar 0.6s var(--ease);
+}
+
+/* ---------- Cabeçalho do perfil ---------- */
+.conta-perfil {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+.conta-perfil h1 {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.conta-perfil p {
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.conta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+.conta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ---------- Cartões e formulários ---------- */
+.conta-card {
+  padding: 24px;
+}
+.conta-card h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+}
+.conta-card h2 svg {
+  color: var(--violet-2);
+}
+.conta-card h2 small {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.conta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.conta-ok {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--success);
+}
+
+.conta-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+
+/* ---------- Pedidos ---------- */
+.conta-pedidos,
+.conta-itens {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.conta-pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.conta-pedido {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.conta-pedido > header,
+.conta-pedido > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.conta-pedido > header div {
+  display: flex;
+  flex-direction: column;
+}
+.conta-pedido > header strong {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+.conta-pedido > header small,
+.conta-pedido > footer span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.conta-pedido > footer {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.conta-pedido > footer strong {
+  font-family: var(--font-display);
+  font-size: 17px;
+}
+
+.conta-status {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.conta-status-pago {
+  color: var(--success);
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+}
+.conta-status-pendente {
+  color: var(--gold);
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.conta-itens {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+}
+.conta-itens li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+.conta-thumb {
+  flex-shrink: 0;
+  width: 40px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.conta-item-titulo {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conta-sem-pedidos,
+.conta-vazia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  color: var(--muted);
+}
+.conta-sem-pedidos {
+  padding: 24px 0;
+}
+.conta-vazia {
+  max-width: 520px;
+  margin: 40px auto 0;
+  padding: 40px 28px;
+}
+.conta-vazia strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--txt);
+}
+
+@keyframes contaEntrar {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (max-width: 900px) {
+  .conta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .conta-perfil {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .conta-card {
+    padding: 18px;
+  }
+  .conta-pedido > header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

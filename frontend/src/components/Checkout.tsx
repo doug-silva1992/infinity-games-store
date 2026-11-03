@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import type { Jogo } from '../data/jogos'
 import { useStore } from '../store/useStore'
+import { postar } from '../utils/api'
 import { resumoDoCarrinho } from '../utils/carrinho'
 import { brl, desconto, numero } from '../utils/format'
 import { emailValido, esperar } from '../utils/validacao'
@@ -14,7 +15,7 @@ import './Checkout.css'
 type Metodo = 'cartao' | 'boleto' | 'pix'
 type Etapa = 'formulario' | 'aguardando' | 'concluido'
 type Pedido = { numero: string; itens: Jogo[]; total: number; xp: number; metodo: Metodo }
-type Erros = Partial<Record<'email' | 'numero' | 'nome' | 'validade' | 'cvv' | 'cpf', string>>
+type Erros = Partial<Record<'email' | 'numero' | 'nome' | 'validade' | 'cvv' | 'cpf' | 'geral', string>>
 
 const METODOS: { id: Metodo; rotulo: string; icone: IconName; dica: string }[] = [
   { id: 'cartao', rotulo: 'Cartão de crédito', icone: 'creditCard', dica: 'Até 6x sem juros' },
@@ -136,7 +137,7 @@ function Copiar({ texto, rotulo }: { texto: string; rotulo: string }) {
 }
 
 function Checkout() {
-  const { carrinho, finalizarCompra } = useStore()
+  const { usuario, carrinho, finalizarCompra } = useStore()
   const { totalCheio, total, economia, xp } = resumoDoCarrinho(carrinho)
   const maxParcelas = Math.max(1, Math.min(6, Math.floor(total / PARCELA_MINIMA)))
 
@@ -147,7 +148,7 @@ function Checkout() {
   const [pedido, setPedido] = useState<Pedido | null>(null)
   const [numeroPedido] = useState(() => String(Math.floor(100000 + Math.random() * 900000)))
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(usuario?.email ?? '')
   const [numeroCartao, setNumeroCartao] = useState('')
   const [nome, setNome] = useState('')
   const [validade, setValidade] = useState('')
@@ -185,7 +186,17 @@ function Checkout() {
     return Object.keys(novos).length === 0
   }
 
-  const concluir = () => {
+  // Logado, o pedido fica salvo na conta (tela Minha conta); visitante só recebe por e-mail
+  const concluir = async () => {
+    if (usuario) {
+      const itens = carrinho.map((j) => ({ jogoId: j.id, titulo: j.titulo, preco: j.preco }))
+      try {
+        await postar('/api/pedidos', { usuarioId: usuario.id, numero: numeroPedido, metodo, itens })
+      } catch (erro) {
+        setErros({ geral: erro instanceof Error ? erro.message : 'Não foi possível registrar o pedido.' })
+        return
+      }
+    }
     setPedido({ numero: numeroPedido, itens: carrinho, total, xp, metodo })
     finalizarCompra()
     setEtapa('concluido')
@@ -196,9 +207,9 @@ function Checkout() {
     if (processando || !validar()) return
     setProcessando(true)
     await esperar(metodo === 'cartao' ? 1600 : 900)
+    if (metodo === 'cartao') await concluir()
     setProcessando(false)
-    if (metodo === 'cartao') concluir()
-    else {
+    if (metodo !== 'cartao') {
       setRestante(PIX_VALIDADE)
       setEtapa('aguardando')
     }
@@ -206,9 +217,10 @@ function Checkout() {
 
   const confirmarPagamento = async () => {
     setProcessando(true)
+    setErros({})
     await esperar(1200)
+    await concluir()
     setProcessando(false)
-    concluir()
   }
 
   if (etapa === 'concluido' && pedido) return <Concluido pedido={pedido} email={email} />
@@ -445,6 +457,12 @@ function Checkout() {
               )}
             </div>
           )}
+
+          {erros.geral && (
+            <small className="form-error" role="alert">
+              {erros.geral}
+            </small>
+          )}
         </form>
 
         <aside className="pay-summary glass">
@@ -518,7 +536,7 @@ function Moldura({ children }: { children: ReactNode }) {
 const TEXTO_CONCLUIDO: Record<Metodo, string> = {
   cartao: 'Pagamento aprovado no cartão.',
   pix: 'Pagamento via Pix confirmado.',
-  boleto: 'Boleto registrado. Em produção, os jogos são liberados após a compensação.',
+  boleto: 'Boleto registrado. Os jogos são liberados após a compensação.',
 }
 
 function Concluido({ pedido, email }: { pedido: Pedido; email: string }) {

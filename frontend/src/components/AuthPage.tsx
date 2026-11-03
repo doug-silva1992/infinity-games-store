@@ -72,8 +72,10 @@ function AuthPage({ kicker, titulo, sub, rodape, children }: Props) {
   )
 }
 
-// Mensagem exibida após o envio enquanto não há autenticação no backend
-export function Sucesso({ titulo, texto }: { titulo: string; texto: string }) {
+// Mensagem exibida após o envio bem-sucedido, com o próximo passo
+type SucessoProps = { titulo: string; texto: string; href?: string; acao?: string }
+
+export function Sucesso({ titulo, texto, href = '#topo', acao = 'Ir para a loja' }: SucessoProps) {
   return (
     <div className="auth-success" role="status">
       <span className="auth-success-icon">
@@ -81,8 +83,8 @@ export function Sucesso({ titulo, texto }: { titulo: string; texto: string }) {
       </span>
       <strong>{titulo}</strong>
       <p>{texto}</p>
-      <a href="#topo" className="btn btn-primary form-submit">
-        Ir para a loja <Icon name="arrowRight" size={18} />
+      <a href={href} className="btn btn-primary form-submit">
+        {acao} <Icon name="arrowRight" size={18} />
       </a>
     </div>
   )

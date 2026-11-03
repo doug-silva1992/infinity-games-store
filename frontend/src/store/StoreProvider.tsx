@@ -11,9 +11,12 @@ import {
   nivelDe,
   xpGanhoPorCompra,
 } from '../data/perfil'
+import type { Usuario } from '../utils/api'
+import { lerSessao, salvarSessao } from '../utils/sessao'
 import { StoreContext, type Modal, type Store, type Toast } from './context'
 
 function StoreProvider({ children }: { children: ReactNode }) {
+  const [usuario, setUsuario] = useState<Usuario | null>(lerSessao)
   const [carrinhoIds, setCarrinhoIds] = useState<number[]>([])
   const [desejos, setDesejos] = useState(() => new Set(DESEJOS_INICIAIS))
   const [biblioteca, setBiblioteca] = useState(() => new Set(BIBLIOTECA_INICIAL))
@@ -51,6 +54,22 @@ function StoreProvider({ children }: { children: ReactNode }) {
       notificar({ tipo: 'nivel', titulo: `Nível ${nivelDe(novoXp)} alcançado!`, texto: 'O Ignis está orgulhoso de você.' })
     }
     setXp(novoXp)
+  }
+
+  const entrar = (novo: Usuario, lembrar: boolean) => {
+    salvarSessao(novo, lembrar)
+    setUsuario(novo)
+  }
+
+  const atualizarUsuario = (novo: Usuario) => {
+    salvarSessao(novo)
+    setUsuario(novo)
+  }
+
+  const sair = () => {
+    salvarSessao(null)
+    setUsuario(null)
+    notificar({ tipo: 'info', titulo: 'Você saiu da sua conta' })
   }
 
   const adicionarAoCarrinho = (jogo: Jogo) => {
@@ -116,6 +135,7 @@ function StoreProvider({ children }: { children: ReactNode }) {
   }
 
   const store: Store = {
+    usuario,
     carrinho: carrinhoIds.map(jogoPorId),
     desejos,
     biblioteca,
@@ -128,6 +148,9 @@ function StoreProvider({ children }: { children: ReactNode }) {
     carrinhoAberto,
     modal,
     busca,
+    entrar,
+    atualizarUsuario,
+    sair,
     adicionarAoCarrinho,
     removerDoCarrinho,
     alternarDesejo,

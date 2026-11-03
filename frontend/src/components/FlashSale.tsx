@@ -31,6 +31,7 @@ function FlashSale() {
 
   const s = Math.floor(restante / 1000)
   const relogio = [Math.floor(s / 3600), Math.floor((s % 3600) / 60), s % 60]
+  if (OFERTAS.length === 0) return null
 
   return (
     <section className="section flash" id="promocoes">

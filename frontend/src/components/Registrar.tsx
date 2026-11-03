@@ -1,11 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import { SENHA_MINIMA, emailValido, esperar } from '../utils/validacao'
+import { ErroApi, postar, type Usuario } from '../utils/api'
+import { SENHA_MINIMA, emailValido } from '../utils/validacao'
 import AuthPage, { Sucesso } from './AuthPage'
 import { Campo, Enviar, Marcar } from './Form'
 
-type Erros = { gamertag?: string; email?: string; senha?: string; confirmacao?: string; termos?: string }
+type Erros = { gamertag?: string; email?: string; senha?: string; confirmacao?: string; termos?: string; geral?: string }
 
-// Tela de cadastro (substituir o envio por POST /api/auth/registrar quando houver autenticação)
+// Tela de cadastro: cria a conta em POST /api/auth/registrar e manda o jogador para o login
 function Registrar() {
   const [gamertag, setGamertag] = useState('')
   const [email, setEmail] = useState('')
@@ -28,9 +29,20 @@ function Registrar() {
     if (Object.keys(novos).length > 0) return
 
     setEnviando(true)
-    await esperar(1100)
-    setEnviando(false)
-    setPronto(true)
+    try {
+      await postar<Usuario>('/api/auth/registrar', { gamertag, email, senha, termos })
+      setPronto(true)
+    } catch (erro) {
+      const mensagem = erro instanceof Error ? erro.message : 'Algo deu errado. Tente novamente.'
+      // 409: e-mail ou gamertag já cadastrados, mostrados no campo certo
+      if (erro instanceof ErroApi && erro.status === 409) {
+        setErros(mensagem.includes('e-mail') ? { email: mensagem } : { gamertag: mensagem })
+      } else {
+        setErros({ geral: mensagem })
+      }
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
@@ -45,7 +57,12 @@ function Registrar() {
       }
     >
       {pronto ? (
-        <Sucesso titulo="Conta criada!" texto={`Bem-vindo à Infinity Games, ${gamertag}. O Ignis já está te esperando.`} />
+        <Sucesso
+          titulo="Conta criada!"
+          texto={`Bem-vindo à Infinity Games, ${gamertag}. Entre com seu e-mail e senha para começar.`}
+          href="#entrar"
+          acao="Fazer login"
+        />
       ) : (
         <form className="auth-form" onSubmit={enviar} noValidate>
           <Campo
@@ -96,6 +113,11 @@ function Registrar() {
             </Marcar>
             {erros.termos && <small className="form-error">{erros.termos}</small>}
           </div>
+          {erros.geral && (
+            <small className="form-error" role="alert">
+              {erros.geral}
+            </small>
+          )}
           <Enviar enviando={enviando} rotulo="Criar conta" carregando="Criando conta..." />
         </form>
       )}

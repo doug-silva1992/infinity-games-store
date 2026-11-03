@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { Children, useEffect, useRef, useState, type ReactNode } from 'react'
 import Icon from './Icon'
 import './Rail.css'
 
@@ -33,6 +33,9 @@ function Rail({ id, kicker, titulo, sub, intro, children }: Props) {
 
   const rolar = (direcao: number) =>
     trilhoRef.current?.scrollBy({ left: direcao * trilhoRef.current.clientWidth * 0.8, behavior: 'smooth' })
+
+  // Trilho sem cards (catálogo vazio) não aparece
+  if (Children.count(children) === 0) return null
 
   return (
     <section className="section" id={id}>

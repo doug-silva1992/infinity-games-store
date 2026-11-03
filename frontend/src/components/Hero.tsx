@@ -1,5 +1,5 @@
 import { useRef, useState, type CSSProperties, type PointerEvent } from 'react'
-import { jogoPorId } from '../data/jogos'
+import { JOGOS } from '../data/jogos'
 import { useStore } from '../store/useStore'
 import { brl, compacto, desconto } from '../utils/format'
 import BuyButton from './BuyButton'
@@ -10,15 +10,14 @@ import Icon from './Icon'
 import Stars from './Stars'
 import './Hero.css'
 
-const DESTAQUES = [2, 1, 13].map(jogoPorId)
+// Jogos em destaque no banner; os que não estão no catálogo ficam de fora
+const DESTAQUES = [2, 1, 13].flatMap((id) => JOGOS.filter((j) => j.id === id))
 
 function Hero() {
   const { desejos, alternarDesejo, abrirJogo } = useStore()
   const [indice, setIndice] = useState(0)
   const heroRef = useRef<HTMLElement>(null)
   const jogo = DESTAQUES[indice]
-  const off = desconto(jogo)
-  const desejado = desejos.has(jogo.id)
 
   // Parallax: a posição do ponteiro move as camadas em profundidades diferentes
   const onPointerMove = (e: PointerEvent) => {
@@ -30,6 +29,12 @@ function Hero() {
   }
 
   const proximo = () => setIndice((i) => (i + 1) % DESTAQUES.length)
+
+  // Sem catálogo, mantém só a âncora #topo usada pelos links "Voltar à loja"
+  if (!jogo) return <section id="topo" />
+
+  const off = desconto(jogo)
+  const desejado = desejos.has(jogo.id)
 
   return (
     <section

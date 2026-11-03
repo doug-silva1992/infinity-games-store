@@ -13,6 +13,7 @@ const TOP = [...JOGOS].sort((a, b) => b.vendas - a.vendas).slice(0, 5)
 function BestSellers() {
   const { abrirJogo } = useStore()
   const [campeao, ...demais] = TOP
+  if (!campeao) return null
 
   return (
     <section className="section" id="mais-vendidos">

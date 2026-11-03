@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AlterarEmailDto, AlterarSenhaDto } from './dto/alterar-conta.dto.js';
 import { AtualizarUsuarioDto } from './dto/atualizar-usuario.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegistrarDto } from './dto/registrar.dto.js';
@@ -81,6 +82,23 @@ export class UsuariosService {
     return this.buscarPorId(id);
   }
 
+  async alterarEmail(id: string, dto: AlterarEmailDto): Promise<Usuario> {
+    await this.conferirSenhaAtual(id, dto.senhaAtual);
+    const existente = await this.usuarios.findOneBy({ email: dto.email });
+    if (existente && existente.id !== id) {
+      throw new ConflictException('Este e-mail já está cadastrado.');
+    }
+    await this.usuarios.update(id, { email: dto.email });
+    return this.buscarPorId(id);
+  }
+
+  async alterarSenha(id: string, dto: AlterarSenhaDto): Promise<void> {
+    await this.conferirSenhaAtual(id, dto.senhaAtual);
+    await this.usuarios.update(id, {
+      senhaHash: await gerarHashSenha(dto.novaSenha),
+    });
+  }
+
   // Soma XP de forma atômica (ex.: após uma compra no checkout)
   async ganharXp(id: string, quantidade: number): Promise<Usuario> {
     const { affected } = await this.usuarios.increment(
@@ -95,6 +113,18 @@ export class UsuariosService {
   async remover(id: string): Promise<void> {
     const { affected } = await this.usuarios.delete(id);
     if (!affected) throw new NotFoundException('Usuário não encontrado.');
+  }
+
+  private async conferirSenhaAtual(id: string, senha: string) {
+    const usuario = await this.usuarios
+      .createQueryBuilder('u')
+      .addSelect('u.senhaHash')
+      .where('u.id = :id', { id })
+      .getOne();
+    if (!usuario) throw new NotFoundException('Usuário não encontrado.');
+    if (!(await conferirSenha(senha, usuario.senhaHash))) {
+      throw new UnauthorizedException('Senha atual incorreta.');
+    }
   }
 
   // Gamertag é única sem diferenciar maiúsculas; e-mail já chega em minúsculas
